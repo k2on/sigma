@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/alexdavid/sigma"
+	"github.com/k2on/sigma"
 )
 
 type mockClient struct {
@@ -73,6 +73,10 @@ func (c *mockClient) Chats() ([]sigma.Chat, error) {
 		})
 	}
 	return results, nil
+}
+
+func (c *mockMessage) Handles() ([]sigma.Handle, error) {
+	return []sigma.Handle{}, nil
 }
 
 func (c *mockClient) Close() {}

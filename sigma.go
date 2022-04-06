@@ -10,6 +10,8 @@ type Client interface {
 	// Chats returns a list of chat threads
 	Chats() ([]Chat, error)
 
+	Handles() ([]Handle, error)
+
 	// Messages returns a list of messages for a given chat id
 	Messages(chatID int, filter MessageFilter) ([]Message, error)
 
@@ -38,6 +40,7 @@ type Chat struct {
 	ID           int       `json:"id"`
 	DisplayName  string    `json:"displayName"`
 	LastActivity time.Time `json:"lastActivity"`
+	isGroupChat  bool      `json:"isGroupChat"`
 }
 
 // Message represents a single message in a chat
@@ -47,6 +50,7 @@ type Message struct {
 	FromMe    bool      `json:"fromMe"`
 	Text      string    `json:"text"`
 	Time      time.Time `json:"time"`
+	Account   string    `json:"text"`
 }
 
 // MessageFilter is used to help paginate message results
@@ -54,4 +58,9 @@ type MessageFilter struct {
 	AfterID  int //(optional) get messages after the specified message id
 	BeforeID int // (optional) get messages before the specified message id
 	Limit    int // the maximum number of messages to return
+}
+
+type Handle struct {
+	ID int 
+	Identifier string // phone # or email
 }

@@ -1,4 +1,4 @@
-module github.com/alexdavid/sigma
+module github.com/k2on/sigma
 
 go 1.12
 

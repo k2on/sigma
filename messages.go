@@ -19,7 +19,8 @@ func (c *realClient) Messages(chatID int, query MessageFilter) ([]Message, error
 		var text string
 		var isSent bool
 		var isFromMe bool
-		err = rows.Scan(&id, &timestamp, &text, &isSent, &isFromMe)
+		var account string
+		err = rows.Scan(&id, &timestamp, &text, &isSent, &isFromMe, &account)
 		if err != nil {
 			return []Message{}, err
 		}
@@ -29,6 +30,7 @@ func (c *realClient) Messages(chatID int, query MessageFilter) ([]Message, error
 			Text:      text,
 			Delivered: isSent,
 			FromMe:    isFromMe,
+			Account:   account,
 		})
 	}
 
@@ -36,7 +38,7 @@ func (c *realClient) Messages(chatID int, query MessageFilter) ([]Message, error
 }
 
 const queryStart = `
-  SELECT message.ROWID, message.date, message.text, message.is_sent, message.is_from_me
+  SELECT message.ROWID, message.date, message.text, message.is_sent, message.is_from_me, message.handle_id
   FROM message
   LEFT JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
   WHERE chat_message_join.chat_id = ?

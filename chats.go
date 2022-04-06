@@ -6,7 +6,7 @@ import (
 
 func (c *realClient) Chats() ([]Chat, error) {
 	rows, err := c.runSQL(`
-		SELECT chat.ROWID, COALESCE(NULLIF(display_name, ""), handle.id, "Unknown") as display_name, COALESCE(MAX(message.date),0) as last_activity
+		SELECT chat.ROWID, COALESCE(NULLIF(display_name, ""), handle.id, "Unknown") as display_name, COALESCE(MAX(message.date),0) as last_activity, chat.style
 		FROM chat
 		LEFT JOIN chat_handle_join ON chat.ROWID = chat_handle_join.chat_id
 		LEFT JOIN handle ON chat_handle_join.handle_id = handle.ROWID
@@ -26,7 +26,8 @@ func (c *realClient) Chats() ([]Chat, error) {
 		var id int
 		var displayName string
 		var lastActivity int64
-		err = rows.Scan(&id, &displayName, &lastActivity)
+		var style int64
+		err = rows.Scan(&id, &displayName, &lastActivity, &style)
 		if err != nil {
 			return []Chat{}, err
 		}
@@ -34,10 +35,12 @@ func (c *realClient) Chats() ([]Chat, error) {
 		if lastActivity > 0 {
 			lastActivityTime = cocoaTimestampToTime(lastActivity)
 		}
+		isGroupChat := style == 43
 		chats = append(chats, Chat{
 			ID:           id,
 			DisplayName:  displayName,
 			LastActivity: lastActivityTime,
+			isGroupChat:  isGroupChat,
 		})
 	}
 	return chats, nil
