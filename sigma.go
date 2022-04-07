@@ -40,7 +40,7 @@ type Chat struct {
 	ID           int       `json:"id"`
 	DisplayName  string    `json:"displayName"`
 	LastActivity time.Time `json:"lastActivity"`
-	isGroupChat  bool      `json:"isGroupChat"`
+	IsGroupChat  bool      `json:"isGroupChat"`
 }
 
 // Message represents a single message in a chat

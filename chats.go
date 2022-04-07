@@ -40,7 +40,7 @@ func (c *realClient) Chats() ([]Chat, error) {
 			ID:           id,
 			DisplayName:  displayName,
 			LastActivity: lastActivityTime,
-			isGroupChat:  isGroupChat,
+			IsGroupChat:  isGroupChat,
 		})
 	}
 	return chats, nil
