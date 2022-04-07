@@ -16,7 +16,7 @@ func (c *realClient) Messages(chatID int, query MessageFilter) ([]Message, error
 	for rows.Next() {
 		var id int
 		var timestamp int64
-		var text string
+		var text *string
 		var isSent bool
 		var isFromMe bool
 		var account string
@@ -24,10 +24,12 @@ func (c *realClient) Messages(chatID int, query MessageFilter) ([]Message, error
 		if err != nil {
 			return []Message{}, err
 		}
+		textNonNil := ""
+		of text != nil { textNonNil = *text }
 		messages = append(messages, Message{
 			ID:        id,
 			Time:      cocoaTimestampToTime(timestamp),
-			Text:      text,
+			Text:      textNonNil,
 			Delivered: isSent,
 			FromMe:    isFromMe,
 			Account:   account,
